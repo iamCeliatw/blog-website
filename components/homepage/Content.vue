@@ -3,7 +3,7 @@
   .content__container
     h1.article__title
       p {{ article.title }}
-      p {{ formatDate(article.date) }}
+      p.article__date {{ formatDate(article.date) }}
     section.article__content
       .article__content--main
         ContentRenderer.content(:value="article")
@@ -45,6 +45,11 @@ const outline = computed(() => props.article.body.toc?.links ?? [])
   height: 150px
   gap: 15px
   border-bottom: 1px solid #666
+  font-size: 30px
+  .article__date
+    font-size: 14px
+    font-weight: 400
+    opacity: 0.6
 .article__content
   width: 100%
   display: flex

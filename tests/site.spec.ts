@@ -44,4 +44,23 @@ describe('靜態網站', () => {
     const hits = allFiles().filter((file) => !file.endsWith('sql_dump.txt') && banned.test(readFileSync(file, 'utf8')))
     expect(hits).toEqual([])
   })
+
+  it('頁面不向 Google Fonts 請求字型', () => {
+    const htmlFiles = allFiles().filter((file) => file.endsWith('.html'))
+    const hits = htmlFiles.filter((file) => /fonts\.(googleapis|gstatic)\.com/.test(readFileSync(file, 'utf8')))
+    expect(htmlFiles.length).toBeGreaterThan(0)
+    expect(hits).toEqual([])
+  })
+
+  it('粉圓體與 Nunito 的字型檔跟網站一起輸出，且 CSS 有引用', () => {
+    const files = allFiles()
+    const css = files.filter((file) => file.endsWith('.css') || file.endsWith('.html')).map((file) => readFileSync(file, 'utf8')).join('\n')
+    for (const family of ['Huninn', 'Nunito']) {
+      const faces = [...css.matchAll(/@font-face\s*{[^}]*}/g)].map(([face]) => face).filter((face) => face.includes(family))
+      expect(faces.length, family).toBeGreaterThan(0)
+      const urls = faces.flatMap((face) => [...face.matchAll(/url\(["']?(\/[^"')]+)/g)].map(([, url]) => url))
+      expect(urls.length, family).toBeGreaterThan(0)
+      for (const url of urls) expect(files, url).toContain(resolve(root, '.' + url))
+    }
+  })
 })
