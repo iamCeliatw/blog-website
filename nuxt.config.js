@@ -8,7 +8,17 @@ export default defineNuxtConfig({
     'nuxt-gtag',
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
+    '@nuxt/fonts',
   ],
+  // 建置時下載字型檔、和網站一起部署，頁面不再向 Google Fonts 請求
+  fonts: {
+    defaults: { weights: [400], styles: ['normal'] },
+    families: [
+      { name: 'Nunito', weights: [400, 700] },
+      // @nuxt/fonts 只會自動下載 font-family 列表的第一個字型，排第二的要標成 global
+      { name: 'Huninn', global: true },
+    ],
+  },
   // 用 Node 內建的 node:sqlite，不必裝 better-sqlite3 原生套件
   content: {
     experimental: { sqliteConnector: 'native' },
@@ -57,14 +67,6 @@ export default defineNuxtConfig({
           property: 'og:image',
           content:
             'https://celia-portfolio-website.vercel.app/project/project_3.jpg',
-        },
-      ],
-      link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap',
         },
       ],
       script: [],

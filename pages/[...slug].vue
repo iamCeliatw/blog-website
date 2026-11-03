@@ -15,13 +15,6 @@
         router-link(to="/") Go to homepage
 </template>
 
-<script setup lang="ts">
-// 只有 404 頁用到這個字型
-useHead({
-  link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Concert+One&display=swap' }],
-})
-</script>
-
 <style lang="sass" scoped>
 @import "@/assets/breakpoint.sass"
 .noPage__wrapper
