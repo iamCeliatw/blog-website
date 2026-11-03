@@ -23,3 +23,5 @@ logs
 .env.*
 !.env.example
 .sonar-project.properties
+.vercel
+.env*
