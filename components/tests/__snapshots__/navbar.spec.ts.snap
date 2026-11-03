@@ -10,7 +10,6 @@ exports[`Navbar > should render correctly 1`] = `
       <ul data-v-0e20c101="" class="navigate__section">
         <li data-v-0e20c101="" class="active-route">post</li>
         <li data-v-0e20c101="" class="">about</li>
-        <li data-v-0e20c101="" class="">category</li>
       </ul>
       <div data-v-0e20c101="" class="light__button">
         <light-mode-button-stub data-v-0e20c101=""></light-mode-button-stub>
