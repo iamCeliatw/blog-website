@@ -5,14 +5,14 @@
 ## 開發流程
 
 - 走 `/flow`（Matt Pocock skills），實作前一定先 grill。
-- 分支：從 `main` 開功能分支，PR 到 `dev`；`dev` 確認後再合進 `main`（正式站）。合併由使用者操作。
+- 分支：從 `main` 開功能分支，命名 `feat/<功能名稱>`，PR 到 `dev`；`dev` 確認後再合進 `main`（正式站）。合併由使用者操作。
 - 指令：`npm run dev`（開發）、`npm run generate`（產生靜態網站）、`npx vitest run`（元件測試）、`npm run test:site`（產生靜態網站並檢查輸出）。
 
 ## Agent skills
 
 ### Issue tracker
 
-Issues 與規格開在 GitHub Issues（iamCeliatw/vuetify-nuxt3），用 `gh` 操作。See `docs/agents/issue-tracker.md`.
+Issues 與規格開在 GitHub Issues（iamCeliatw/blog-website），用 `gh` 操作。See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
