@@ -19,6 +19,7 @@ declare module 'vue' {
     HomepageParticleEffect: typeof import('./components/homepage/ParticleEffect.vue')['default']
     HomepageSvgMoonIcon: typeof import('./components/homepage/svg/moonIcon.vue')['default']
     HomepageSvgSunIcon: typeof import('./components/homepage/svg/sunIcon.vue')['default']
+    HomepageTheGiscus: typeof import('./components/homepage/TheGiscus.vue')['default']
     Mybutton: typeof import('./components/Mybutton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

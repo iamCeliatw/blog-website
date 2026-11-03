@@ -1,80 +1,44 @@
 <template lang="pug">
-section.main__wrapper 
+section.main__wrapper
   .main__container(v-if="!pending && !error")
-    .article__container(v-for="article in articlesByYear" :key="article.id")
-      h1.article__title {{ article.year }}
+    .article__container(v-for="group in articlesByYear" :key="group.year")
+      h1.article__title {{ group.year }}
         .article__items--container
-          .article__items(v-for="article in article.articles" :key="article.id"  @click="goToArticle(article.key)")
-            span.date {{ dateFormat(article.publish_date) }}
+          NuxtLink.article__items(v-for="article in group.articles" :key="article.path" :to="articleUrl(article.path)")
+            span.date {{ dateFormat(article.date) }}
             span {{ article.title }}
-    div(v-if="pending")
-      p Loading...
-    div(v-if="error")
-      p Error loading articles
+  div(v-if="pending")
+    p Loading...
+  div(v-if="error")
+    p Error loading articles
 </template>
 
 <script lang="ts" setup>
-// import type { Database } from "~/types/supabase";
-interface Articles {
-  id: string
-  key: string
-  title: string
-  publish_date: string
-  description: string
-  status: number
-  content: string
-  category_id: number
-  count: number
-}
+type ArticleItem = { path: string; title: string; date: string }
 
 const props = defineProps<{
-  articles: Articles[]
+  articles: ArticleItem[] | null
   pending: boolean
-  error: Error | null
+  error: Error | null | undefined
 }>()
-const articlesByYear = ref<{ year: string; articles: unknown }[]>([])
 
-watchEffect(() => {
-  if (props.articles) {
-    const filteredArticles = props.articles.filter(
-      (article) => article.status !== 0
-    )
-    const groupedByYear = filteredArticles.reduce(
-      (acc: { [x: string]: any[] }, article: { publish_date: string }) => {
-        const year = article.publish_date.split('-')[0]
-        if (!acc[year]) {
-          acc[year] = []
-        }
-        acc[year].push(article)
-        return acc
-      },
-      {}
-    )
-    const articlesArray = Object.entries(groupedByYear).map(
-      ([year, articles]) => {
-        articles.sort(
-          (a: { publish_date: string }, b: { publish_date: string }) =>
-            new Date(b.publish_date).getTime() -
-            new Date(a.publish_date).getTime()
-        )
-        return { year: year, articles: articles }
-      }
-    )
-    articlesArray.sort((a, b) => Number(b.year) - Number(a.year))
-    articlesByYear.value = articlesArray
+// 文章已依日期新到舊排序，這裡只依年份分組
+const articlesByYear = computed(() => {
+  const groups: { year: string; articles: ArticleItem[] }[] = []
+  for (const article of props.articles ?? []) {
+    const year = article.date.slice(0, 4)
+    const last = groups[groups.length - 1]
+    if (last?.year === year) last.articles.push(article)
+    else groups.push({ year, articles: [article] })
   }
+  return groups
 })
-const router = useRouter()
-// @ts-ignore
-const goToArticle = (key: string) => {
-  console.log(key)
-  router.push(`/article/${key}`)
-}
-// @ts-ignore
-const dateFormat = (originalDate: string | number | Date) => {
-  const date = new Date(originalDate)
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
+
+// content 路徑是 /articles/<key>，網址維持 /article/<key>
+const articleUrl = (path: string) => path.replace(/^\/articles\//, '/article/')
+
+const dateFormat = (date: string) =>
+  new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 </script>
 
 <style lang="sass" scoped>
@@ -107,6 +71,9 @@ const dateFormat = (originalDate: string | number | Date) => {
 .article__items--container
   border-left: 1px solid var(--border-color)
 .article__items
+  display: block
+  color: inherit
+  text-decoration: none
   margin-bottom: 10px
   padding-left: 25px
   font-size: 16px

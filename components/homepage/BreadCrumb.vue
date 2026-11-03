@@ -1,9 +1,11 @@
-<template lang="pug"> 
-//- ClientOnly
-.breadCrumb__wrapper
-  v-breadcrumbs(:items="items")
-    template(v-slot:divider)
-      v-icon(icon="mdi-chevron-right")
+<template lang="pug">
+nav.breadCrumb__wrapper(aria-label="breadcrumb")
+  ol.breadCrumb__list
+    li(v-for="(item, index) in items" :key="item.href")
+      svg.breadCrumb__divider(v-if="index" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true")
+        path(d="M8.59 16.58 13.17 12 8.59 7.41 10 6l6 6-6 6z" fill="currentColor")
+      span(v-if="item.disabled" aria-current="page") {{ item.title }}
+      NuxtLink(v-else :to="item.href") {{ item.title }}
 </template>
 
 <script lang="ts" setup>
@@ -40,7 +42,7 @@ const updateItems = () => {
           .slice(0, index + 1)
           .map((seg) =>
             seg.startsWith(":")
-              ? reactiveRoute.params[seg.substring(1)] || seg
+              ? reactiveRoute.params[seg.replace(/[:()]/g, "")] || seg
               : seg
           )
           .join("/")}`;
@@ -83,4 +85,17 @@ watch(
   width: auto
   max-width: 800px
   margin: auto
+  padding: 16px
+.breadCrumb__list
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  list-style: none
+  li
+    display: flex
+    align-items: center
+  a
+    color: inherit
+.breadCrumb__divider
+  margin: 0 6px
 </style>
