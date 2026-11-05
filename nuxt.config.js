@@ -1,54 +1,40 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   css: ['@/assets/main.sass'],
   devtools: { enabled: true },
-  build: {
-    transpile: ['vuetify'],
-    analyze: true,
-  },
   modules: [
-    (_options, nuxt) => {
-      nuxt.hooks.hook('vite:extendConfig', (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }))
-      })
-    },
-    '@pinia/nuxt',
-    '@nuxtjs/supabase',
+    '@nuxt/content',
     '@nuxtjs/color-mode',
-    '@zadigetvoltaire/nuxt-gtm',
     'nuxt-gtag',
     '@nuxtjs/sitemap',
-    ['@nuxtjs/robots', { configPath: '~/robots.config' }],
+    '@nuxtjs/robots',
+    '@nuxt/fonts',
   ],
-  sitemap: {
-    hostname: 'https://celia-blog.vercel.app/',
-    routes: async () => {
-      // 返回應該包含在 Sitemap 中的路由列表
-      // 這裡可以動態生成，例如從 API 獲取
-      const routes = ['/']
-      return routes
-    },
+  // 建置時下載字型檔、和網站一起部署，頁面不再向 Google Fonts 請求
+  fonts: {
+    defaults: { weights: [400], styles: ['normal'] },
+    families: [
+      { name: 'Nunito', weights: [400, 700] },
+      // @nuxt/fonts 只會自動下載 font-family 列表的第一個字型，排第二的要標成 global
+      { name: 'Huninn', global: true },
+    ],
+  },
+  // 用 Node 內建的 node:sqlite，不必裝 better-sqlite3 原生套件
+  content: {
+    experimental: { sqliteConnector: 'native' },
+    build: { markdown: { highlight: { theme: 'monokai' } } },
+  },
+  site: {
+    url: 'https://celia-blog.vercel.app',
   },
   gtag: {
     id: 'G-D5BG0PXWCQ',
-  },
-  gtm: {
-    id: `GTM-KCZKSVHP`,
-    enabled: true,
-    pageTracking: true,
   },
   colorMode: {
     preference: 'dark',
     fallback: 'dark',
   },
   vite: {
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
-    },
     esbuild: {
       drop: process.env.VITE_DEBUG_MODE ? [] : ['console', 'debugger'],
     },
@@ -83,24 +69,7 @@ export default defineNuxtConfig({
             'https://celia-portfolio-website.vercel.app/project/project_3.jpg',
         },
       ],
-      link: [{ rel: 'canonical', href: 'https://celia-blog.vercel.app/' }],
       script: [],
-    },
-  },
-  supabase: {
-    redirectOptions: {
-      login: '/login',
-      callback: '/admin',
-      // include: ['/admin'],
-      exclude: [
-        '/',
-        '/sitemap.xml',
-        '/admin(/*)?',
-        '/article(/*)?',
-        '/about',
-        '/category(/*)?',
-      ],
-      cookieRedirect: false,
     },
   },
 })

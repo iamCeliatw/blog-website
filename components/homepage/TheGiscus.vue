@@ -2,7 +2,7 @@
 .giscus__wrapper 
   Giscus(
       id="comments"
-      repo="iamCeliatw/vuetify-nuxt3"
+      repo="iamCeliatw/blog-website"
       repoId="R_kgDOLnHWQQ"
       category="Announcements"
       categoryId="DIC_kwDOLnHWQc4Cet3_"

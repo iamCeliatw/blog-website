@@ -1,24 +1,15 @@
 <template lang="pug">
-.category__wrapper 
-    .category__container
-        .category__title(v-for="category in categoryList" :key="category.id" @click="() => $router.push(`/category/${category.name}`)")
-            h3 {{ category.name }}
+.category__wrapper
+  .category__container
+    NuxtLink.category__title(v-for="name in categories" :key="name" :to="`/category/${name}`")
+      h3 {{ name }}
 </template>
 
 <script lang="ts" setup>
-const supabase = useSupabaseClient();
-//@ts-ignore
-const { data: categoryList, error } = await useAsyncData(
-  "category",
-  async () => {
-    const { data, error } = await supabase.from("categories").select();
-    if (error) {
-      console.error("Failed to fetch profile:", error.message);
-      throw error;
-    }
-    return data;
-  }
-);
+const { data: categories } = await useAsyncData('categories', async () => {
+  const rows = await queryCollection('articles').select('category').all()
+  return [...new Set(rows.map((row) => row.category).filter(Boolean))] as string[]
+})
 </script>
 
 <style lang="sass" scoped>
@@ -41,6 +32,7 @@ const { data: categoryList, error } = await useAsyncData(
         padding: 4px 12px
         border-radius: 4px
         cursor: pointer
+        text-decoration: none
         background-size: 200% 200%
         transition: all 0.5s
         &:hover

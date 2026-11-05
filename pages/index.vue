@@ -6,20 +6,12 @@ HomepageMainSection(:articles="articles" :pending="pending" :error="error")
 </template>
 
 <script setup lang="ts">
-const supabase = useSupabaseClient()
-const {
-  data: articles,
-  pending,
-  error,
-  refresh,
-} = useAsyncData('articlesData', async () => {
-  const { data, error } = await supabase.from('articles').select()
-  if (error) {
-    console.error('Failed to fetch articles:', error.message)
-    throw error
-  }
-  return data
-})
+const { data: articles, pending, error } = await useAsyncData('articles', () =>
+  queryCollection('articles')
+    .select('path', 'title', 'date')
+    .order('date', 'DESC')
+    .all()
+)
 useHead({
   title: `文章 - Celia's blog`,
   meta: [

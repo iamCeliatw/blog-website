@@ -1,6 +1,5 @@
 <template lang="pug">
-NuxtLayout
-  .noPage__wrapper 
+.noPage__wrapper
     .noPage__container
       h1 404
     .planet
@@ -16,18 +15,7 @@ NuxtLayout
         router-link(to="/") Go to homepage
 </template>
 
-<script lang="ts" setup>
-definePageMeta({
-  layout: false,
-});
-const route = useRoute();
-if (route.params.slug[0] == "admin") {
-  setPageLayout("default");
-}
-</script>
-
 <style lang="sass" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap')
 @import "@/assets/breakpoint.sass"
 .noPage__wrapper
   font-family: "Concert One", sans-serif

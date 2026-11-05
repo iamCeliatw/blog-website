@@ -20,10 +20,7 @@ describe("BreadCrumb", () => {
     (useRoute as unknown as Mock).mockReturnValue(routeMock);
     (useRouter as unknown as Mock).mockReturnValue({});
     const wrapper = shallowMount(BreadCrumb, {
-      stubs: {
-        "v-breadcrumbs": true,
-        "v-icon": true,
-      },
+      global: { stubs: { NuxtLink: true } },
     });
     const expectedItems = [
       { title: "Home", href: "/", disabled: false },
@@ -47,10 +44,7 @@ describe("BreadCrumb", () => {
     (useRoute as unknown as Mock).mockReturnValue(routeMock);
     (useRouter as unknown as Mock).mockReturnValue({});
     const wrapper = shallowMount(BreadCrumb, {
-      stubs: {
-        "v-breadcrumbs": true,
-        "v-icon": true,
-      },
+      global: { stubs: { NuxtLink: true } },
     });
 
     const expectedItems = [

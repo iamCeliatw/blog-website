@@ -1,5 +1,10 @@
 @import './variable'
 .article__content
+  .article__content--main
+    line-height: 1.9
+    letter-spacing: 0.04em
+  h2
+    margin-top: 26px
   .ql-syntax
     background-color: #23241f
     color: #f8f8f2
@@ -8,15 +13,19 @@
     &:hover
       box-shadow: 0 0 5px #f8f8f2
   pre
+    background-color: #272822
+    border-radius: 5px
     white-space: pre-wrap
     margin-bottom: 5px
     margin-top: 5px
     padding: 5px 10px
+    line-height: 1.6
+    letter-spacing: 0
 
   img
     width: 100%
   p
-    margin: 10px 0
+    margin: 14px 0
   a
     color: #000
     text-decoration: none

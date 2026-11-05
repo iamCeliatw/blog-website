@@ -1,25 +1,16 @@
 <template lang="pug">
-.about__wrapper 
+.about__wrapper
   HomepageNavbar
   HomepageBreadCrumb
-  .about__container 
-    .title 
-      h1 {{ profile[0].name }}
+  .about__container(v-if="about")
+    .title
+      h1 {{ about.title }}
     .about__content
-      p {{ profile[0].about }}
+      ContentRenderer(:value="about")
 </template>
 
 <script setup lang="ts">
-const supabase = useSupabaseClient();
-
-const { data: profile, error } = await useAsyncData("profile", async () => {
-  const { data, error } = await supabase.from("profile").select();
-  if (error) {
-    console.error("Failed to fetch profile:", error.message);
-    throw error;
-  }
-  return data;
-});
+const { data: about } = await useAsyncData('about', () => queryCollection('about').first())
 </script>
 
 <style lang="sass" scoped>
